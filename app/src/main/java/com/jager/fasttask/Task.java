@@ -13,7 +13,7 @@ public class Task {
         this.taskName = name;
         this.taskDescription = description;
         this.creationDate = createdOn;
-        this.color = DefaultColors.WHITE.getColor();
+        this.color = DefaultColors.BLACK.getColor();
         this.completionDate = null;
         this.expirationDate = null;
     }
@@ -37,7 +37,7 @@ public class Task {
     public Task(String name, String description, Date createdOn, Date expiration){
         this.taskName = name;
         this.taskDescription = description;
-        this.color = DefaultColors.WHITE.getColor();
+        this.color = DefaultColors.BLACK.getColor();
         this.creationDate = createdOn;
         this.expirationDate = expiration;
         this.completionDate = null;
@@ -46,7 +46,7 @@ public class Task {
     public Task(String name, String description, Date createdOn, Date expiration, Date completedOn){
         this.taskName = name;
         this.taskDescription = description;
-        this.color = DefaultColors.WHITE.getColor();
+        this.color = DefaultColors.BLACK.getColor();
         this.creationDate = createdOn;
         this.expirationDate = expiration;
         this.completionDate = completedOn;
