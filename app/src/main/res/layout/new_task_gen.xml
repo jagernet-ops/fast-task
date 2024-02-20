@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:inputType="text"
+        android:id="@+id/taskname"
+        android:hint="Enter Task Name"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:inputType="text"
+        android:id="@+id/taskdescription"
+        android:layout_below="@+id/taskname"
+        android:hint="Enter Task Description"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/taskcategory"
+        android:inputType="text"
+        android:layout_below="@+id/taskdescription"
+        android:hint="Enter Task Category"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/taskexpiration"
+        android:inputType="datetime"
+        android:layout_below="@+id/taskcategory"
+        android:hint="Task Expiration"/>
+    <Button
+        android:id="@+id/colorselectbutton"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/taskexpiration"
+        android:text="Select Color" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/colorselectbutton">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_weight="1"
+            android:text="Discard Task"
+            android:drawableLeft="@drawable/baseline_delete_forever_24"
+            android:id="@+id/discardtaskbutton"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.AppCompat.Button"
+            android:text="Save Task"
+            android:layout_weight="1"
+            android:drawableRight="@drawable/baseline_create_24"
+            android:id="@+id/savetaskbutton"/>
+    </LinearLayout>
+
+</RelativeLayout>
