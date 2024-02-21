@@ -18,11 +18,13 @@ import com.jager.fasttask.MainActivity;
 import com.jager.fasttask.NewTaskFragment;
 import com.jager.fasttask.R;
 import com.jager.fasttask.Task;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
 
-    private List<Task> taskList;
+    private List<Task> taskList = new ArrayList<Task>(0);
     private final MainActivity activity;
     private final TaskListDatabase databaseHelper;
 
