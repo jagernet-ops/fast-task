@@ -1,4 +1,4 @@
-package com.jager.fasttask;
+package com.jager.fasttask.Database;
 import android.provider.BaseColumns;
 
 public class TaskListContract {

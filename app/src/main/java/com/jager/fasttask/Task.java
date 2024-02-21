@@ -3,6 +3,8 @@ package com.jager.fasttask;
 import java.util.Date;
 
 public class Task {
+    private int id;
+    private boolean isComplete = false;
     private final String taskName;
     private final String taskDescription;
     private final String color;
@@ -58,6 +60,10 @@ public class Task {
         this.category = category;
     }
 
+    public void setId(int id){
+        this.id = id;
+    }
+
     public String getTaskName() {
         return taskName;
     }
@@ -84,5 +90,17 @@ public class Task {
 
     public String getCategory() {
         return category;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public boolean isComplete() {
+        return isComplete;
+    }
+
+    public void setComplete(boolean complete) {
+        isComplete = complete;
     }
 }

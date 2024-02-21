@@ -1,11 +1,20 @@
-package com.jager.fasttask;
+package com.jager.fasttask.Database;
 
 import android.content.ContentValues;
 import android.content.Context;
-import com.jager.fasttask.TaskListContract.TaskEntry;
-import com.jager.fasttask.CategoryListContract.CategoryEntry;
+
+import com.jager.fasttask.Task;
+import com.jager.fasttask.Database.TaskListContract.TaskEntry;
+import com.jager.fasttask.Database.CategoryListContract.CategoryEntry;
+
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 public class TaskListDatabase extends SQLiteOpenHelper {
     private static final String SQL_CREATE_TASK_ENTRIES =
             "CREATE TABLE IF NOT EXISTS " + TaskEntry.TABLE_NAME + " (" +
@@ -47,6 +56,7 @@ public class TaskListDatabase extends SQLiteOpenHelper {
         taskValues.put(TaskEntry.COLUMN_NAME_TASKNAME, task.getTaskName());
         taskValues.put(TaskEntry.COLUMN_NAME_DESCRIPTION, task.getTaskDescription());
         taskValues.put(TaskEntry.COLUMN_NAME_COLOR, task.getColor());
+        taskValues.put(TaskEntry.COLUMN_NAME_CREATION, task.getCreationDate().getTime());
         if(task.getExpirationDate() != null){
             taskValues.put(TaskEntry.COLUMN_NAME_EXPIRATION, task.getExpirationDate().getTime());
         }
@@ -58,7 +68,40 @@ public class TaskListDatabase extends SQLiteOpenHelper {
 
     public void deleteTask(Task task){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TaskEntry.TABLE_NAME, TaskEntry.COLUMN_NAME_CREATION+"=?", new String[]{String.valueOf(task.getCreationDate().getTime())});
+        db.delete(TaskEntry.TABLE_NAME, TaskEntry._ID+"=?", new String[]{String.valueOf(task.getId())});
+    }
+
+    public List<Task> getAllTasks() {
+        List<Task> taskList = new ArrayList<>();
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.beginTransaction();
+        try {
+            Cursor allTasks = db.query(TaskEntry.TABLE_NAME, null, null, null, null, null, null);
+            if (allTasks != null) {
+                if (allTasks.moveToFirst()) {
+                    do {
+                        Cursor categoryCursor = db.query(CategoryEntry.TABLE_NAME, null, CategoryEntry._ID + "=?", new String[]{String.valueOf(allTasks.getString(2))}, null, null, null);
+                        categoryCursor.moveToFirst();
+                        Task newTask = new Task(allTasks.getString(3), allTasks.getString(4), new Date(Long.parseLong(allTasks.getString(7))), categoryCursor.getString(1));
+                        newTask.setId(allTasks.getInt(1));
+                        taskList.add(newTask);
+                    } while (allTasks.moveToNext());
+                }
+            }
+        }finally {
+            db.endTransaction();
+        }
+        return taskList;
+    }
+
+    public void updateTask(Task task){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues updatedTaskValues = new ContentValues();
+        updatedTaskValues.put(TaskEntry.COLUMN_NAME_TASKNAME, task.getTaskName());
+        updatedTaskValues.put(TaskEntry.COLUMN_NAME_DESCRIPTION, task.getTaskDescription());
+        updatedTaskValues.put(TaskEntry.COLUMN_NAME_COLOR, task.getColor());
+        updatedTaskValues.put(TaskEntry.COLUMN_NAME_CREATION, task.getCreationDate().getTime());
+        db.update(TaskEntry.TABLE_NAME, updatedTaskValues, TaskEntry._ID+"=?", new String[]{String.valueOf(task.getId())});
     }
 
     @Override

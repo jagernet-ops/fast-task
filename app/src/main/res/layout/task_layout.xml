@@ -15,17 +15,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:buttonTint="#3a4450"
-            android:id="@+id/checkbox"
+            android:id="@+id/taskcheckbox"
             android:text="Hello World"
             android:paddingStart="8dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Category"
+            android:textStyle="bold"
+            android:id="@+id/categoryname"
+            android:layout_alignEnd="@+id/taskcheckbox"
+            android:layout_marginVertical="12dp"
+            android:layout_marginRight="50dp"/>
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/baseline_flag_24"
             android:layout_marginVertical="10dp"
             android:layout_marginEnd="7dp"
-            android:id="@+id/category"
+            android:id="@+id/categoryflag"
             android:contentDescription="@string/category_flag"
-            android:layout_alignEnd="@+id/checkbox"/>
+            android:layout_alignEnd="@+id/taskcheckbox"/>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

@@ -6,6 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:inputType="text"
+        android:maxLength="14"
         android:id="@+id/taskname"
         android:hint="Enter Task Name"/>
     <EditText
@@ -20,6 +21,7 @@
         android:layout_height="50dp"
         android:id="@+id/taskcategory"
         android:inputType="text"
+        android:maxLength="14"
         android:layout_below="@+id/taskdescription"
         android:hint="Enter Task Category"/>
     <EditText
