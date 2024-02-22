@@ -7,7 +7,7 @@ public class Task {
     private boolean isComplete = false;
     private final String taskName;
     private final String taskDescription;
-    private final String color;
+    private String color;
     private final Date creationDate;
     private final String category;
     private final Date completionDate;
@@ -74,6 +74,10 @@ public class Task {
 
     public String getColor() {
         return color;
+    }
+
+    public void setColor(String hexColor){
+        this.color = hexColor;
     }
 
     public Date getCreationDate() {

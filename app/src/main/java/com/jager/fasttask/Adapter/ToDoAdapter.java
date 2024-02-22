@@ -9,6 +9,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -51,9 +52,11 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
+                    int selectedTask = holder.getAdapterPosition();
                     task.setComplete(true);
-                    taskList.remove(task);
+                    taskList.remove(selectedTask);
                     databaseHelper.deleteTask(task);
+                    notifyDataSetChanged();
                 }
             }
         });

@@ -6,41 +6,55 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:inputType="text"
+        android:layout_marginTop="20dp"
         android:maxLength="14"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
         android:id="@+id/taskname"
-        android:hint="Enter Task Name"/>
+        android:hint="Enter: Task Name"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:inputType="text"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
         android:id="@+id/taskdescription"
         android:layout_below="@+id/taskname"
-        android:hint="Enter Task Description"/>
+        android:hint="Enter: Task Description"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
         android:id="@+id/taskcategory"
         android:inputType="text"
         android:maxLength="14"
         android:layout_below="@+id/taskdescription"
-        android:hint="Enter Task Category"/>
+        android:hint="Enter: Task Category"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
         android:id="@+id/taskexpiration"
         android:inputType="datetime"
         android:layout_below="@+id/taskcategory"
-        android:hint="Task Expiration"/>
+        android:hint="Optional: Task Expiration"/>
     <Button
         android:id="@+id/colorselectbutton"
         style="@style/Widget.AppCompat.Button"
         android:layout_width="match_parent"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/taskexpiration"
         android:text="Select Color" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginBottom="20dp"
         android:layout_below="@+id/colorselectbutton">
         <Button
             android:layout_width="match_parent"

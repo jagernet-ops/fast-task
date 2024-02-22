@@ -1,10 +1,10 @@
 package com.jager.fasttask;
 
 public enum DefaultColors {
-    RED("#fc0303"),
-    GREEN("#24fc03"),
-    BLACK("000000"),
-    BLUE("#0345fc");
+    RED("#FC0303"),
+    GREEN("#24FC03"),
+    BLACK("#000000"),
+    BLUE("#0345FC");
     private final String color;
     DefaultColors(String hexColor){
         this.color = hexColor;

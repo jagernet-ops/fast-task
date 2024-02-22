@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +26,7 @@ public class NewTaskFragment extends BottomSheetDialogFragment {
     private static final String TAG = "NewTaskFragment";
     private final TaskListDatabase databaseHelper = TaskListDatabase.getManagementInstance(getActivity());
 
-    private String color;
+    private String color = "#FC0303";
     private EditText taskName;
     private EditText taskDescription;
     private EditText taskCategory;
@@ -56,7 +57,6 @@ public class NewTaskFragment extends BottomSheetDialogFragment {
         discardTask = view.findViewById(R.id.discardtaskbutton);
         saveTask = view.findViewById(R.id.savetaskbutton);
         boolean updateTask = false;
-        boolean[] textBoxesFilled = { false, false, false };
         Bundle incomingBundle = getArguments();
         if(incomingBundle != null){
             updateTask = true;
@@ -65,62 +65,21 @@ public class NewTaskFragment extends BottomSheetDialogFragment {
             taskDescription.setText(constructedTask.getTaskDescription());
             taskCategory.setText(constructedTask.getCategory());
         }
-        if(taskName.length() > 0 || taskDescription.length() > 0 || taskCategory.length() > 0){
-            saveTask.setEnabled(false);
-        }
         taskName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.toString().equals("")){
-                    saveTask.setEnabled(false);
-                    saveTask.setBackgroundColor(Color.GRAY);
-                }else if(textBoxesFilled[0] && textBoxesFilled[1] && textBoxesFilled[2]){
-                    saveTask.setEnabled(true);
-                    saveTask.setBackgroundColor(Color.parseColor(DefaultColors.GREEN.getColor()));
-                }else{
-                    textBoxesFilled[0] = true;
-                }
+                saveTask.setEnabled(!s.toString().equals(""));
             }
             @Override
             public void afterTextChanged(Editable s) {}
         });
-        taskDescription.addTextChangedListener(new TextWatcher() {
+        colorPicker.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.toString().equals("")){
-                    saveTask.setEnabled(false);
-                    saveTask.setBackgroundColor(Color.GRAY);
-                }else if(textBoxesFilled[0] && textBoxesFilled[1] && textBoxesFilled[2]){
-                    saveTask.setEnabled(true);
-                    saveTask.setBackgroundColor(Color.parseColor(DefaultColors.GREEN.getColor()));
-                }else{
-                    textBoxesFilled[1] = true;
-                }
+            public void onClick(View v) {
+                color = DefaultColors.GREEN.getColor();
             }
-            @Override
-            public void afterTextChanged(Editable s) {}
-        });
-        taskCategory.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.toString().equals("")){
-                    saveTask.setEnabled(false);
-                    saveTask.setBackgroundColor(Color.GRAY);
-                }else if(textBoxesFilled[0] && textBoxesFilled[1] && textBoxesFilled[2]){
-                    saveTask.setEnabled(true);
-                    saveTask.setBackgroundColor(Color.parseColor(DefaultColors.GREEN.getColor()));
-                }else{
-                    textBoxesFilled[2] = true;
-                }
-            }
-            @Override
-            public void afterTextChanged(Editable s) {}
         });
         boolean finalUpdateTask = updateTask;
         saveTask.setOnClickListener(new View.OnClickListener() {
@@ -132,12 +91,15 @@ public class NewTaskFragment extends BottomSheetDialogFragment {
                     String updatedCategory = taskCategory.getText().toString();
                     Task updatedTask = new Task(updatedName, updatedDescription, new Date(incomingBundle.getLong("taskCreation")), updatedCategory);
                     updatedTask.setId(incomingBundle.getInt("id"));
+                    Log.d("Task ID", String.valueOf(incomingBundle.getInt("id")));
+                    updatedTask.setColor(color.equals("") ? DefaultColors.BLACK.getColor() : color);
                     databaseHelper.updateTask(updatedTask);
                 }else{
                     String newTaskName = taskName.getText().toString();
                     String newTaskDescription = taskDescription.getText().toString();
                     String newTaskCategory = taskCategory.getText().toString();
                     Task newTask = new Task(newTaskName, newTaskDescription, new Date(), newTaskCategory);
+                    newTask.setColor(color.equals("") ? DefaultColors.BLACK.getColor() : color);
                     databaseHelper.insertTask(newTask);
                 }
                 dismiss();
