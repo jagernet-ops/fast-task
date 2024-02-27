@@ -11,7 +11,7 @@ public class TaskListContract {
         public static final String COLUMN_NAME_COLOR = "color";
         public static final String COLUMN_NAME_EXPIRATION = "expirationDate";
         public static final String COLUMN_NAME_CREATION = "creationDate";
-        public static final String COLUMN_NAME_COMPLETION = "completionDate";
+        public static final String COLUMN_NAME_COMPLETION = "completed";
     }
 }
 

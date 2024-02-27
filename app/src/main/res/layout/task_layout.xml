@@ -65,7 +65,7 @@
             android:visibility="gone"
             android:background="@color/white">
             <TextView
-                android:layout_width="250dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/taskcarddescription"
                 android:text="@string/loremIpsum"

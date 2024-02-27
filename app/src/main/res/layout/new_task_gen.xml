@@ -2,15 +2,23 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Add Task"
+        android:textSize="30dp"
+        android:gravity="center_horizontal"
+        android:id="@+id/addTask"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_below="@+id/addTask"
         android:inputType="text"
-        android:layout_marginTop="20dp"
         android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"
         android:id="@+id/taskname"
-        android:hint="Enter: Task Name"/>
+        android:hint="Task Name*"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -19,7 +27,7 @@
         android:layout_marginLeft="15dp"
         android:id="@+id/taskdescription"
         android:layout_below="@+id/taskname"
-        android:hint="Optional: Task Description"/>
+        android:hint="Task Description"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -28,7 +36,7 @@
         android:id="@+id/taskcategory"
         android:inputType="text"
         android:layout_below="@+id/taskdescription"
-        android:hint="Optional: Task Category"/>
+        android:hint="Task Category"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -37,11 +45,11 @@
         android:id="@+id/taskexpiration"
         android:inputType="datetime"
         android:layout_below="@+id/taskcategory"
-        android:hint="Optional: Task Expiration"/>
+        android:hint="Task Expiration"/>
     <Button
         android:id="@+id/colorselectbutton"
-        style="@style/Widget.AppCompat.Button"
         android:layout_width="match_parent"
+        android:theme="@style/Button.Black"
         android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"
         android:layout_height="wrap_content"
@@ -57,7 +65,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Widget.AppCompat.Button"
+            android:theme="@style/Button.Black"
             android:layout_weight="1"
             android:text="Discard Task"
             android:drawableLeft="@drawable/baseline_delete_forever_24"
@@ -65,7 +73,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Widget.AppCompat.Button"
+            android:theme="@style/Button.Black"
             android:text="Save Task"
             android:layout_weight="1"
             android:drawableRight="@drawable/baseline_create_24"

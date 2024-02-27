@@ -49,7 +49,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
         holder.categoryFlag.setColorFilter(Color.parseColor(task.getColor()));
         holder.checkBox.setText(task.getTaskName());
         holder.checkBox.setPaintFlags(task.getIsComplete() ? holder.checkBox.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG : holder.checkBox.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-        holder.categoryName.setText(task.getTaskDescription());
+        holder.categoryName.setText(task.getCategory());
         holder.categoryName.setPaintFlags(task.getIsComplete() ? holder.checkBox.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG : holder.checkBox.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
         holder.checkBox.setChecked(task.getIsComplete());
         holder.taskDescription.setText(task.getTaskDescription());

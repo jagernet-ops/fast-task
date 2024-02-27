@@ -109,21 +109,23 @@ public class NewTaskFragment extends BottomSheetDialogFragment {
         saveTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(finalUpdateTask){
-                    String updatedName = taskName.getText().toString();
-                    String updatedDescription = taskDescription.getText().toString();
-                    String updatedCategory = taskCategory.getText().toString();
-                    Task updatedTask = new Task(updatedName, updatedDescription, new Date(incomingBundle.getLong("taskCreation")), updatedCategory);
-                    updatedTask.setId(incomingBundle.getInt("id"));
-                    updatedTask.setColor(taskColor);
-                    databaseHelper.updateTask(updatedTask);
-                }else{
-                    String newTaskName = taskName.getText().toString();
-                    String newTaskDescription = taskDescription.getText().toString();
-                    String newTaskCategory = taskCategory.getText().toString();
-                    Task newTask = new Task(newTaskName, newTaskDescription, new Date(), newTaskCategory);
-                    newTask.setColor(taskColor);
-                    databaseHelper.insertTask(newTask);
+                if(!taskName.getText().toString().equals("")){
+                    if(finalUpdateTask){
+                        String updatedName = taskName.getText().toString();
+                        String updatedDescription = taskDescription.getText().toString();
+                        String updatedCategory = taskCategory.getText().toString();
+                        Task updatedTask = new Task(updatedName, updatedDescription, new Date(incomingBundle.getLong("taskCreation")), updatedCategory);
+                        updatedTask.setId(incomingBundle.getInt("id"));
+                        updatedTask.setColor(taskColor);
+                        databaseHelper.updateTask(updatedTask);
+                    }else{
+                        String newTaskName = taskName.getText().toString();
+                        String newTaskDescription = taskDescription.getText().toString();
+                        String newTaskCategory = taskCategory.getText().toString();
+                        Task newTask = new Task(newTaskName, newTaskDescription, new Date(), newTaskCategory);
+                        newTask.setColor(taskColor);
+                        databaseHelper.insertTask(newTask);
+                    }
                 }
                 dismiss();
             }
