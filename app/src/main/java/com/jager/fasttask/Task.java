@@ -1,5 +1,6 @@
 package com.jager.fasttask;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Task {
@@ -8,6 +9,7 @@ public class Task {
     private final String taskName;
     private final String taskDescription;
     private String color;
+    private boolean isExpanded;
     private final Date creationDate;
     private final String category;
     private final Date completionDate;
@@ -16,50 +18,16 @@ public class Task {
         this.taskName = name;
         this.taskDescription = description;
         this.creationDate = createdOn;
-        this.color = DefaultColors.BLACK.getColor();
-        this.completionDate = null;
-        this.expirationDate = null;
-        this.category = category;
-    }
-    public Task(String name, String description, Date createdOn, DefaultColors color, String category){
-        this.taskName = name;
-        this.taskDescription = description;
-        this.creationDate = createdOn;
-        this.color = color.getColor();
-        this.completionDate = null;
-        this.expirationDate = null;
-        this.category = category;
-    }
-    public Task(String name, String description, Date createdOn, String customColor, String category){
-        this.taskName = name;
-        this.taskDescription = description;
-        this.creationDate = createdOn;
-        this.color = customColor;
+        this.color = "#000000";
         this.completionDate = null;
         this.expirationDate = null;
         this.category = category;
     }
 
-    public Task(String name, String description, Date createdOn, Date expiration, String category){
-        this.taskName = name;
-        this.taskDescription = description;
-        this.color = DefaultColors.BLACK.getColor();
-        this.creationDate = createdOn;
-        this.expirationDate = expiration;
-        this.completionDate = null;
-        this.category = category;
+    public static String getFormattedDate(Date targetDate){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/YY");
+        return dateFormat.format(targetDate);
     }
-
-    public Task(String name, String description, Date createdOn, Date expiration, Date completedOn, String category){
-        this.taskName = name;
-        this.taskDescription = description;
-        this.color = DefaultColors.BLACK.getColor();
-        this.creationDate = createdOn;
-        this.expirationDate = expiration;
-        this.completionDate = completedOn;
-        this.category = category;
-    }
-
     public void setId(int id){
         this.id = id;
     }
@@ -84,10 +52,6 @@ public class Task {
         return creationDate;
     }
 
-    public Date getCompletionDate() {
-        return completionDate;
-    }
-
     public Date getExpirationDate() {
         return expirationDate;
     }
@@ -100,11 +64,20 @@ public class Task {
         return id;
     }
 
-    public boolean isComplete() {
+    public boolean getIsComplete() {
         return isComplete;
     }
 
     public void setComplete(boolean complete) {
         isComplete = complete;
+    }
+
+    public boolean getIsExpanded(){
+        return isExpanded;
+    }
+
+
+    public void toggleIsExpanded(){
+        isExpanded = !isExpanded;
     }
 }

@@ -8,33 +8,88 @@
     android:layout_marginHorizontal="16dp"
     android:layout_marginVertical="8dp">
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="8dp">
-        <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:id="@+id/taskLayout"
+            android:paddingStart="8dp">
+
+            <CheckBox
+                android:id="@+id/taskcheckbox"
+                android:layout_width="375dp"
+                android:layout_height="match_parent"
+                android:buttonTint="#3a4450"
+                android:paddingStart="8dp"
+                android:text="Hello World" />
+
+            <TextView
+                android:id="@+id/categoryname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/taskcheckbox"
+                android:layout_marginVertical="12dp"
+                android:layout_marginRight="80dp"
+                android:text="Category"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/categoryflag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/taskcheckbox"
+                android:layout_marginVertical="10dp"
+                android:layout_marginEnd="50dp"
+                android:contentDescription="@string/category_flag"
+                android:src="@drawable/baseline_flag_24" />
+
+            <ImageButton
+                android:id="@+id/taskexpandbutton"
+                android:layout_width="36dp"
+                android:layout_height="31dp"
+                android:layout_alignEnd="@+id/taskcheckbox"
+                android:layout_alignParentTop="true"
+                android:layout_marginVertical="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="4dp"
+                android:backgroundTint="@color/white"
+                android:contentDescription="@string/task_expand"
+                android:src="@drawable/baseline_expand_more_24" />
+        </RelativeLayout>
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:buttonTint="#3a4450"
-            android:id="@+id/taskcheckbox"
-            android:text="Hello World"
-            android:paddingStart="8dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Category"
-            android:textStyle="bold"
-            android:id="@+id/categoryname"
-            android:layout_alignEnd="@+id/taskcheckbox"
-            android:layout_marginVertical="12dp"
-            android:layout_marginRight="50dp"/>
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/baseline_flag_24"
-            android:layout_marginVertical="10dp"
-            android:layout_marginEnd="7dp"
-            android:id="@+id/categoryflag"
-            android:contentDescription="@string/category_flag"
-            android:layout_alignEnd="@+id/taskcheckbox"/>
+            android:layout_below="@+id/taskLayout"
+            android:id="@+id/expandedView"
+            android:visibility="gone"
+            android:background="@color/white">
+            <TextView
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/taskcarddescription"
+                android:text="@string/loremIpsum"
+                android:layout_marginBottom="20dp"
+                android:layout_marginStart="20dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/startingDate"
+                android:text="@string/started_s"
+                android:maxLength="17"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="20dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:id="@+id/expireDate"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/startingDate"
+                android:maxLength="17"
+                android:layout_marginEnd="20dp"
+                android:text="@string/expires_s"/>
+        </RelativeLayout>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

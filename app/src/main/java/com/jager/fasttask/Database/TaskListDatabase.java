@@ -58,12 +58,18 @@ public class TaskListDatabase extends SQLiteOpenHelper {
         if(task.getCategory() != null){
             taskValues.put(TaskEntry.COLUMN_NAME_CATEGORY, task.getCategory());
         }
+        taskValues.put(TaskEntry.COLUMN_NAME_COMPLETION, 0);
         db.insert(TaskEntry.TABLE_NAME, null, taskValues);
     }
 
     public void deleteTask(Task task){
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TaskEntry.TABLE_NAME, TaskEntry._ID+"=?", new String[]{String.valueOf(task.getId())});
+    }
+
+    public void deleteTask(int taskID){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TaskEntry.TABLE_NAME, TaskEntry._ID+"=?", new String[]{String.valueOf(taskID)});
     }
 
     public List<Task> getAllTasks() {
@@ -75,9 +81,11 @@ public class TaskListDatabase extends SQLiteOpenHelper {
             if (allTasks != null) {
                 if (allTasks.moveToFirst()) {
                     do {
-                        Task newTask = new Task(allTasks.getString(2), allTasks.getString(1), allTasks.getString(6) != null ? new Date(Long.parseLong(allTasks.getString(6))) : new Date(), allTasks.getString(4));
+                        Task newTask = new Task(allTasks.getString(2), allTasks.getString(3), new Date(Long.parseLong(allTasks.getString(6))), allTasks.getString(1));
+                        newTask.setColor(allTasks.getString(4));
                         newTask.setId(allTasks.getInt(0));
-                        Log.d("DB TASK ID", String.valueOf(allTasks.getInt(0)));
+                        Log.d("Task Complete?", allTasks.getInt(7) == 0 ? "False" : "True");
+                        newTask.setComplete(allTasks.getInt(7) != 0);
                         taskList.add(newTask);
                     } while (allTasks.moveToNext());
                 }
@@ -96,6 +104,7 @@ public class TaskListDatabase extends SQLiteOpenHelper {
         updatedTaskValues.put(TaskEntry.COLUMN_NAME_COLOR, task.getColor());
         updatedTaskValues.put(TaskEntry.COLUMN_NAME_CREATION, task.getCreationDate().getTime());
         updatedTaskValues.put(TaskEntry.COLUMN_NAME_CATEGORY, task.getCategory());
+        updatedTaskValues.put(TaskEntry.COLUMN_NAME_COMPLETION, task.getIsComplete() ? 1 : 0 );
         db.update(TaskEntry.TABLE_NAME, updatedTaskValues, TaskEntry._ID+"=?", new String[]{String.valueOf(task.getId())});
     }
 

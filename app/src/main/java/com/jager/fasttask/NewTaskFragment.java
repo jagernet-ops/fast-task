@@ -15,18 +15,26 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.dhaval2404.colorpicker.ColorPickerDialog;
 import com.github.dhaval2404.colorpicker.MaterialColorPickerDialog;
+import com.github.dhaval2404.colorpicker.listener.ColorListener;
+import com.github.dhaval2404.colorpicker.model.ColorShape;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.jager.fasttask.Adapter.ToDoAdapter;
 import com.jager.fasttask.Database.TaskListDatabase;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Date;
+import java.util.List;
 
 public class NewTaskFragment extends BottomSheetDialogFragment {
     private static final String TAG = "NewTaskFragment";
     private final TaskListDatabase databaseHelper = TaskListDatabase.getManagementInstance(getActivity());
 
-    private String color = "#FC0303";
+    private String taskColor = "#000000";
     private EditText taskName;
     private EditText taskDescription;
     private EditText taskCategory;
@@ -34,8 +42,12 @@ public class NewTaskFragment extends BottomSheetDialogFragment {
     private Button colorPicker;
     private Button discardTask;
     private Button saveTask;
+    private static List<Task> taskList;
+    private static ToDoAdapter mainToDoAdapter;
 
-    public static NewTaskFragment getInstance(){
+    public static NewTaskFragment getInstance(List<Task> tasks, ToDoAdapter toDoAdapter){
+        taskList = tasks;
+        mainToDoAdapter = toDoAdapter;
         return new NewTaskFragment();
     }
 
@@ -78,7 +90,19 @@ public class NewTaskFragment extends BottomSheetDialogFragment {
         colorPicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                color = DefaultColors.GREEN.getColor();
+                new ColorPickerDialog
+                        .Builder(view.getContext())
+                        .setTitle("Pick Color")
+                        .setColorShape(ColorShape.SQAURE)
+                        .setDefaultColor(com.github.dhaval2404.colorpicker.R.color.black)
+                        .setColorListener(new ColorListener() {
+                            @Override
+                            public void onColorSelected(int color, @NotNull String colorHex) {
+                                // Handle Color Selection
+                                taskColor = colorHex.toUpperCase();
+                            }
+                        })
+                        .show();
             }
         });
         boolean finalUpdateTask = updateTask;
@@ -91,15 +115,14 @@ public class NewTaskFragment extends BottomSheetDialogFragment {
                     String updatedCategory = taskCategory.getText().toString();
                     Task updatedTask = new Task(updatedName, updatedDescription, new Date(incomingBundle.getLong("taskCreation")), updatedCategory);
                     updatedTask.setId(incomingBundle.getInt("id"));
-                    Log.d("Task ID", String.valueOf(incomingBundle.getInt("id")));
-                    updatedTask.setColor(color.equals("") ? DefaultColors.BLACK.getColor() : color);
+                    updatedTask.setColor(taskColor);
                     databaseHelper.updateTask(updatedTask);
                 }else{
                     String newTaskName = taskName.getText().toString();
                     String newTaskDescription = taskDescription.getText().toString();
                     String newTaskCategory = taskCategory.getText().toString();
                     Task newTask = new Task(newTaskName, newTaskDescription, new Date(), newTaskCategory);
-                    newTask.setColor(color.equals("") ? DefaultColors.BLACK.getColor() : color);
+                    newTask.setColor(taskColor);
                     databaseHelper.insertTask(newTask);
                 }
                 dismiss();
@@ -108,6 +131,11 @@ public class NewTaskFragment extends BottomSheetDialogFragment {
         discardTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(incomingBundle != null){
+                    taskList.remove(incomingBundle.getInt("id"));
+                    databaseHelper.deleteTask(incomingBundle.getInt("id"));
+                    mainToDoAdapter.notifyDataSetChanged();
+                }
                 dismiss();
             }
         });

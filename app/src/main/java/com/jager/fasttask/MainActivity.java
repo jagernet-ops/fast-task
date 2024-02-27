@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity implements OnTaskFragmentClo
     private ToDoAdapter toDoAdapter;
     private MaterialToolbar filterButton;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements OnTaskFragmentClo
         addTodoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NewTaskFragment.getInstance().show(getSupportFragmentManager(), NewTaskFragment.getInstance().getTag());
+                NewTaskFragment.getInstance(renderedTaskList, toDoAdapter).show(getSupportFragmentManager(), NewTaskFragment.getInstance(renderedTaskList, toDoAdapter).getTag());
             }
         });
     }
