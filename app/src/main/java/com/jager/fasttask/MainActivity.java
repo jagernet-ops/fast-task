@@ -55,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements OnTaskFragmentClo
         taskDatabaseHelper.getTaskFromFilter(TaskListContract.TaskEntry.COLUMN_NAME_CATEGORY, "Fruit");
         renderedTaskList = new ArrayList<>();
         toDoAdapter = new ToDoAdapter(this);
-        toDoRecycler.setHasFixedSize(true);
         toDoRecycler.setLayoutManager(new LinearLayoutManager(this));
         toDoRecycler.setAdapter(toDoAdapter);
         taskDatabaseHelper.markExpiredTasksComplete();
