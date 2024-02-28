@@ -4,15 +4,19 @@ package com.jager.fasttask.Fragment;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.TypedArrayUtils;
 
 import com.github.dhaval2404.colorpicker.MaterialColorPickerDialog;
 import com.github.dhaval2404.colorpicker.listener.ColorListener;
@@ -28,10 +32,11 @@ import com.jager.fasttask.Task;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class FilterTaskFragment extends BottomSheetDialogFragment {
 
-    private AutoCompleteTextView taskFilter;
+    private Spinner taskFilter;
     private Button filterColor;
     private Button filterExpiry;
     private static ToDoAdapter toDoAdapter;
@@ -58,7 +63,28 @@ public class FilterTaskFragment extends BottomSheetDialogFragment {
         taskFilter = view.findViewById(R.id.filterAutoComplete);
         filterColor = view.findViewById(R.id.filterColor);
         filterExpiry = view.findViewById(R.id.filterExpiry);
-        taskFilter.setThreshold(1);
+        List<String> retrievedCategories = databaseHelper.getAllTasks().stream().map(Task::getCategory).collect(Collectors.toList());
+        ArrayList<String> adapterCompliantList = new ArrayList<>(retrievedCategories.size()+1);
+        adapterCompliantList.add(" ");
+        adapterCompliantList.addAll(retrievedCategories);
+        ArrayAdapter<String> categories = new ArrayAdapter<>(mainActivityReference, android.R.layout.select_dialog_item, adapterCompliantList.toArray(new String[]{}));
+        taskFilter.setAdapter(categories);
+        taskFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getItemAtPosition(position).toString();
+                if(!selectedItem.equals(" ")){
+                    toDoAdapter.setTaskList(databaseHelper.getTaskFromFilter(TaskEntry.COLUMN_NAME_CATEGORY, selectedItem));
+                    toDoAdapter.notifyDataSetChanged();
+                    dismiss();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         filterColor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

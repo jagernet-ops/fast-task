@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements OnTaskFragmentClo
     private TaskListDatabase taskDatabaseHelper;
     private Resources getResources;
     private boolean isFiltering = false;
-    private MainActivity thisActivity;
+    private MainActivity thisActivity = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +67,10 @@ public class MainActivity extends AppCompatActivity implements OnTaskFragmentClo
             public void onClick(View v) {
                 isFiltering = false;
                 NewTaskFragment.getInstance(renderedTaskList, toDoAdapter).show(getSupportFragmentManager(), NewTaskFragment.getInstance(renderedTaskList, toDoAdapter).getTag());
+                renderedTaskList = taskDatabaseHelper.getAllTasks();
+                Collections.reverse(renderedTaskList);
+                toDoAdapter.setTaskList(renderedTaskList);
+                toDoAdapter.notifyDataSetChanged();
             }
         });
         ItemTouchHelper taskTouchHelper = new ItemTouchHelper(new TaskRecyclerSwipe(toDoAdapter, taskDatabaseHelper, getResources));

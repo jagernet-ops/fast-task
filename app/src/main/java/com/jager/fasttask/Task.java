@@ -6,13 +6,13 @@ import java.util.Date;
 public class Task {
     private int id;
     private boolean isComplete = false;
-    private final String taskName;
-    private final String taskDescription;
-    private String color;
-    private boolean isExpanded;
-    private final Date creationDate;
-    private final String category;
-    private Date expirationDate;
+    private String taskName = "";
+    private String taskDescription = "";
+    private String color = "";
+    private boolean isExpanded = false;
+    private Date creationDate = null;
+    private String category = "";
+    private Date expirationDate = null;
     public Task(String name, String description, Date createdOn, String category){
         this.taskName = name;
         this.taskDescription = description;

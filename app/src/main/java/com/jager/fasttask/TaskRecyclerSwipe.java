@@ -61,6 +61,7 @@ public class TaskRecyclerSwipe extends ItemTouchHelper.SimpleCallback {
                 public void onClick(DialogInterface dialog, int which) {
                     databaseHelper.deleteTask(mainAdapter.getTaskList().get(swipedTaskPosition).getId());
                     mainAdapter.getTaskList().remove(swipedTaskPosition);
+                    mainAdapter.setTaskList(databaseHelper.getAllTasks());
                     mainAdapter.notifyDataSetChanged();
                 }
             });
