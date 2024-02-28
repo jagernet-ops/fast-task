@@ -107,11 +107,17 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
         taskInfoBundle.putString("taskCategory", targetTask.getCategory());
         taskInfoBundle.putString("taskColor", targetTask.getColor());
         taskInfoBundle.putLong("taskCreation", targetTask.getCreationDate().getTime());
-        taskInfoBundle.putLong("taskExpiration", targetTask.getExpirationDate().getTime());
+        if(targetTask.getExpirationDate() != null){
+            taskInfoBundle.putLong("taskExpiration", targetTask.getExpirationDate().getTime());
+        }
 
         NewTaskFragment editPopup = new NewTaskFragment();
         editPopup.setArguments(taskInfoBundle);
         editPopup.show(activity.getSupportFragmentManager(), editPopup.getTag());
+    }
+
+    public List<Task> getTaskList(){
+        return taskList;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{

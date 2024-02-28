@@ -134,9 +134,7 @@ public class NewTaskFragment extends BottomSheetDialogFragment {
             @Override
             public void onClick(View v) {
                 if(incomingBundle != null){
-                    taskList.remove(incomingBundle.getInt("id"));
                     databaseHelper.deleteTask(incomingBundle.getInt("id"));
-                    mainToDoAdapter.notifyDataSetChanged();
                 }
                 dismiss();
             }

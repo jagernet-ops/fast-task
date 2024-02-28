@@ -1,6 +1,7 @@
 package com.jager.fasttask;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,11 +34,13 @@ public class MainActivity extends AppCompatActivity implements OnTaskFragmentClo
     private List<Task> renderedTaskList;
     private ToDoAdapter toDoAdapter;
     private MaterialToolbar filterButton;
+    private TaskListDatabase taskDatabaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        taskDatabaseHelper = TaskListDatabase.getManagementInstance(getApplicationContext());
         toDoRecycler = findViewById(R.id.recyclerview);
         addTodoButton = findViewById(R.id.fabButton);
         filterButton = findViewById(R.id.topAppBar);
@@ -52,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements OnTaskFragmentClo
         toDoRecycler.setHasFixedSize(true);
         toDoRecycler.setLayoutManager(new LinearLayoutManager(this));
         toDoRecycler.setAdapter(toDoAdapter);
-        renderedTaskList = TaskListDatabase.getManagementInstance(getApplicationContext()).getAllTasks();
+        renderedTaskList = taskDatabaseHelper.getAllTasks();
         Collections.reverse(renderedTaskList);
         toDoAdapter.setTaskList(renderedTaskList);
         toDoAdapter.notifyDataSetChanged();
@@ -62,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements OnTaskFragmentClo
                 NewTaskFragment.getInstance(renderedTaskList, toDoAdapter).show(getSupportFragmentManager(), NewTaskFragment.getInstance(renderedTaskList, toDoAdapter).getTag());
             }
         });
+        ItemTouchHelper taskTouchHelper = new ItemTouchHelper(new TaskRecyclerSwipe(toDoAdapter, taskDatabaseHelper));
+        taskTouchHelper.attachToRecyclerView(toDoRecycler);
     }
 
     @Override
