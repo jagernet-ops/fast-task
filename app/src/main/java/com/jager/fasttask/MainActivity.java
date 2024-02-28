@@ -5,24 +5,20 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.ContentValues;
 import android.content.DialogInterface;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.Cursor;
-import android.graphics.Color;
+import android.content.res.Resources;
 import android.os.Bundle;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationBarMenu;
 import com.jager.fasttask.Adapter.ToDoAdapter;
 import com.jager.fasttask.Database.TaskListContract;
-import com.jager.fasttask.Database.TaskListContract.TaskEntry;
 import com.jager.fasttask.Database.TaskListDatabase;
+import com.jager.fasttask.Fragment.FilterTaskFragment;
+import com.jager.fasttask.Fragment.NewTaskFragment;
 
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,11 +31,15 @@ public class MainActivity extends AppCompatActivity implements OnTaskFragmentClo
     private ToDoAdapter toDoAdapter;
     private MaterialToolbar filterButton;
     private TaskListDatabase taskDatabaseHelper;
+    private Resources getResources;
+    private boolean isFiltering = false;
+    private MainActivity thisActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getResources = getResources();
         taskDatabaseHelper = TaskListDatabase.getManagementInstance(getApplicationContext());
         toDoRecycler = findViewById(R.id.recyclerview);
         addTodoButton = findViewById(R.id.fabButton);
@@ -47,14 +47,18 @@ public class MainActivity extends AppCompatActivity implements OnTaskFragmentClo
         filterButton.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isFiltering = true;
+                FilterTaskFragment.getInstance(toDoAdapter, taskDatabaseHelper, thisActivity).show(getSupportFragmentManager(), FilterTaskFragment.getInstance(toDoAdapter, taskDatabaseHelper, thisActivity).getTag());
 
             }
         });
+        taskDatabaseHelper.getTaskFromFilter(TaskListContract.TaskEntry.COLUMN_NAME_CATEGORY, "Fruit");
         renderedTaskList = new ArrayList<>();
         toDoAdapter = new ToDoAdapter(this);
         toDoRecycler.setHasFixedSize(true);
         toDoRecycler.setLayoutManager(new LinearLayoutManager(this));
         toDoRecycler.setAdapter(toDoAdapter);
+        taskDatabaseHelper.markExpiredTasksComplete();
         renderedTaskList = taskDatabaseHelper.getAllTasks();
         Collections.reverse(renderedTaskList);
         toDoAdapter.setTaskList(renderedTaskList);
@@ -62,18 +66,21 @@ public class MainActivity extends AppCompatActivity implements OnTaskFragmentClo
         addTodoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isFiltering = false;
                 NewTaskFragment.getInstance(renderedTaskList, toDoAdapter).show(getSupportFragmentManager(), NewTaskFragment.getInstance(renderedTaskList, toDoAdapter).getTag());
             }
         });
-        ItemTouchHelper taskTouchHelper = new ItemTouchHelper(new TaskRecyclerSwipe(toDoAdapter, taskDatabaseHelper));
+        ItemTouchHelper taskTouchHelper = new ItemTouchHelper(new TaskRecyclerSwipe(toDoAdapter, taskDatabaseHelper, getResources));
         taskTouchHelper.attachToRecyclerView(toDoRecycler);
     }
 
     @Override
     public void onDialogClose(DialogInterface dialogInterface) {
-        renderedTaskList = TaskListDatabase.getManagementInstance(getApplicationContext()).getAllTasks();
-        Collections.reverse(renderedTaskList);
-        toDoAdapter.setTaskList(renderedTaskList);
-        toDoAdapter.notifyDataSetChanged();
+        if(!isFiltering) {
+            renderedTaskList = TaskListDatabase.getManagementInstance(getApplicationContext()).getAllTasks();
+            Collections.reverse(renderedTaskList);
+            toDoAdapter.setTaskList(renderedTaskList);
+            toDoAdapter.notifyDataSetChanged();
+        }
     }
 }

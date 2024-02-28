@@ -12,20 +12,18 @@ public class Task {
     private boolean isExpanded;
     private final Date creationDate;
     private final String category;
-    private final Date completionDate;
-    private final Date expirationDate;
+    private Date expirationDate;
     public Task(String name, String description, Date createdOn, String category){
         this.taskName = name;
         this.taskDescription = description;
         this.creationDate = createdOn;
         this.color = "#000000";
-        this.completionDate = null;
         this.expirationDate = null;
         this.category = category;
     }
 
     public static String getFormattedDate(Date targetDate){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/YY");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yy");
         return dateFormat.format(targetDate);
     }
     public void setId(int id){
@@ -54,6 +52,9 @@ public class Task {
 
     public Date getExpirationDate() {
         return expirationDate;
+    }
+    public void setExpirationDate(Date expirationDate){
+        this.expirationDate = expirationDate;
     }
 
     public String getCategory() {

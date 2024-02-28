@@ -1,11 +1,8 @@
-package com.jager.fasttask;
+package com.jager.fasttask.Fragment;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,18 +12,21 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.dhaval2404.colorpicker.ColorPickerDialog;
-import com.github.dhaval2404.colorpicker.MaterialColorPickerDialog;
 import com.github.dhaval2404.colorpicker.listener.ColorListener;
 import com.github.dhaval2404.colorpicker.model.ColorShape;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.jager.fasttask.Adapter.ToDoAdapter;
 import com.jager.fasttask.Database.TaskListDatabase;
+import com.jager.fasttask.OnTaskFragmentCloseListener;
+import com.jager.fasttask.R;
+import com.jager.fasttask.Task;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -76,17 +76,8 @@ public class NewTaskFragment extends BottomSheetDialogFragment {
             taskName.setText(constructedTask.getTaskName());
             taskDescription.setText(constructedTask.getTaskDescription());
             taskCategory.setText(constructedTask.getCategory());
+            taskColor = incomingBundle.getString("taskColor");
         }
-        taskName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                saveTask.setEnabled(!s.toString().equals(""));
-            }
-            @Override
-            public void afterTextChanged(Editable s) {}
-        });
         colorPicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,22 +102,43 @@ public class NewTaskFragment extends BottomSheetDialogFragment {
             public void onClick(View v) {
                 if(!taskName.getText().toString().equals("")){
                     if(finalUpdateTask){
+                        Date updatedTaskExpirationDate = null;
+                        if(!taskExpiration.getText().toString().equals("")){
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yy");
+                            try {
+                                updatedTaskExpirationDate = dateFormat.parse(taskExpiration.getText().toString());
+                            } catch (ParseException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
                         String updatedName = taskName.getText().toString();
                         String updatedDescription = taskDescription.getText().toString();
                         String updatedCategory = taskCategory.getText().toString();
                         Task updatedTask = new Task(updatedName, updatedDescription, new Date(incomingBundle.getLong("taskCreation")), updatedCategory);
                         updatedTask.setId(incomingBundle.getInt("id"));
+                        updatedTask.setExpirationDate(updatedTaskExpirationDate);
                         updatedTask.setColor(taskColor);
                         databaseHelper.updateTask(updatedTask);
                     }else{
+                        Date newTaskExpirationDate = null;
+                        if(!taskExpiration.getText().toString().equals("")){
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yy");
+                            try {
+                                newTaskExpirationDate = dateFormat.parse(taskExpiration.getText().toString());
+                            } catch (ParseException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
                         String newTaskName = taskName.getText().toString();
                         String newTaskDescription = taskDescription.getText().toString();
                         String newTaskCategory = taskCategory.getText().toString();
                         Task newTask = new Task(newTaskName, newTaskDescription, new Date(), newTaskCategory);
+                        newTask.setExpirationDate(newTaskExpirationDate);
                         newTask.setColor(taskColor);
                         databaseHelper.insertTask(newTask);
                     }
                 }
+                databaseHelper.markExpiredTasksComplete();
                 dismiss();
             }
         });

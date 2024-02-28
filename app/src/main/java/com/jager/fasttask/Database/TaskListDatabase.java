@@ -72,22 +72,95 @@ public class TaskListDatabase extends SQLiteOpenHelper {
         db.delete(TaskEntry.TABLE_NAME, TaskEntry._ID+"=?", new String[]{String.valueOf(taskID)});
     }
 
+    public void markExpiredTasksComplete(){
+        Date onOpenDate = new Date();
+        List<Task> allTasks = getAllTasks();
+        for(Task task : allTasks){
+            if(task.getExpirationDate() != null && task.getExpirationDate().getTime() <= onOpenDate.getTime()){
+                task.setComplete(true);
+                updateTask(task);
+            }
+        }
+    }
+
+    public List<Task> getTaskByExpiry(){
+        long filterTimestamp = new Date().getTime();
+        List<Task> sortedTaskList = getAllTasks();
+        List<Task> completedTasks = new ArrayList<>();
+        for(int i = 0; i < sortedTaskList.size(); i++){
+            if(sortedTaskList.get(i).getIsComplete()){
+                completedTasks.add(sortedTaskList.get(i));
+                sortedTaskList.remove(i);
+                i--;
+                continue;
+            }
+            if(sortedTaskList.get(i).getExpirationDate().getTime() > filterTimestamp){
+                Task currentTask = sortedTaskList.get(i);
+                int j = i - 1;
+                while(j >= 0 && sortedTaskList.get(j).getExpirationDate().getTime() > currentTask.getExpirationDate().getTime()){
+                    sortedTaskList.set(j+1, sortedTaskList.get(j));
+                    j--;
+                }
+                sortedTaskList.set(j+1, currentTask);
+            }
+        }
+        if(completedTasks.size() > 0){
+            sortedTaskList.addAll(completedTasks);
+        }
+        return sortedTaskList;
+    }
+
+    public List<Task> getTaskFromFilter(String columnName, String key){
+        List<Task> taskList = new ArrayList<>();
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.beginTransaction();
+        try {
+            Cursor allTasks = db.query(TaskEntry.TABLE_NAME, null, columnName+"=?",new String[]{key}, null, null, null);
+            if (allTasks != null) {
+                if(allTasks.moveToFirst()) {
+                    do {
+                        Task newTask = new Task(allTasks.getString(2), allTasks.getString(3), new Date(Long.parseLong(allTasks.getString(6))), allTasks.getString(1));
+                        newTask.setColor(allTasks.getString(4));
+                        newTask.setId(allTasks.getInt(0));
+                        newTask.setComplete(allTasks.getInt(7) != 0);
+                        if (allTasks.getLong(5) != 0) {
+                            newTask.setExpirationDate(new Date(allTasks.getLong(5)));
+                        }
+                        taskList.add(newTask);
+                    } while (allTasks.moveToNext());
+                    allTasks.close();
+                }
+            }
+        }finally {
+            db.endTransaction();
+        }
+        if(taskList.size() > 0){
+            for(Task task : taskList){
+                Log.d("Task", task.getTaskName());
+            }
+        }
+        return taskList;
+    }
+
     public List<Task> getAllTasks() {
         List<Task> taskList = new ArrayList<>();
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction();
         try {
             Cursor allTasks = db.query(TaskEntry.TABLE_NAME, null, null, null, null, null, null);
-            if (allTasks != null) {
+            if (allTasks != null && allTasks.getCount() > 0) {
                 if (allTasks.moveToFirst()) {
                     do {
                         Task newTask = new Task(allTasks.getString(2), allTasks.getString(3), new Date(Long.parseLong(allTasks.getString(6))), allTasks.getString(1));
                         newTask.setColor(allTasks.getString(4));
                         newTask.setId(allTasks.getInt(0));
-                        Log.d("Task Complete?", allTasks.getInt(7) == 0 ? "False" : "True");
                         newTask.setComplete(allTasks.getInt(7) != 0);
+                        if(allTasks.getLong(5) != 0){
+                            newTask.setExpirationDate(new Date(allTasks.getLong(5)));
+                        }
                         taskList.add(newTask);
                     } while (allTasks.moveToNext());
+                    allTasks.close();
                 }
             }
         }finally {
@@ -104,6 +177,12 @@ public class TaskListDatabase extends SQLiteOpenHelper {
         updatedTaskValues.put(TaskEntry.COLUMN_NAME_COLOR, task.getColor());
         updatedTaskValues.put(TaskEntry.COLUMN_NAME_CREATION, task.getCreationDate().getTime());
         updatedTaskValues.put(TaskEntry.COLUMN_NAME_CATEGORY, task.getCategory());
+        if(task.getExpirationDate() != null){
+            updatedTaskValues.put(TaskEntry.COLUMN_NAME_EXPIRATION, task.getExpirationDate().getTime());
+            if(task.getExpirationDate().getTime() > new Date().getTime()){
+                task.setComplete(false);
+            }
+        }
         updatedTaskValues.put(TaskEntry.COLUMN_NAME_COMPLETION, task.getIsComplete() ? 1 : 0 );
         db.update(TaskEntry.TABLE_NAME, updatedTaskValues, TaskEntry._ID+"=?", new String[]{String.valueOf(task.getId())});
     }

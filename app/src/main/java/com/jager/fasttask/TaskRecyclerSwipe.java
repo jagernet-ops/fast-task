@@ -2,6 +2,10 @@ package com.jager.fasttask;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.res.Resources;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.util.TypedValue;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -9,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jager.fasttask.Adapter.ToDoAdapter;
 import com.jager.fasttask.Database.TaskListDatabase;
+
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 public class TaskRecyclerSwipe extends ItemTouchHelper.SimpleCallback {
 
@@ -30,10 +36,12 @@ public class TaskRecyclerSwipe extends ItemTouchHelper.SimpleCallback {
      */
     private final ToDoAdapter mainAdapter;
     private final TaskListDatabase databaseHelper;
-    public TaskRecyclerSwipe(ToDoAdapter mainAdapter, TaskListDatabase mainDatabase) {
+    private final Resources getResources;
+    public TaskRecyclerSwipe(ToDoAdapter mainAdapter, TaskListDatabase mainDatabase, Resources mainActivitytResources) {
         super(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
         this.mainAdapter = mainAdapter;
         this.databaseHelper = mainDatabase;
+        getResources = mainActivitytResources;
     }
 
     @Override
@@ -67,5 +75,24 @@ public class TaskRecyclerSwipe extends ItemTouchHelper.SimpleCallback {
         }else if(direction == ItemTouchHelper.LEFT){
             mainAdapter.editTaskInformation(swipedTaskPosition);
         }
+    }
+
+    @Override
+    public void onChildDraw (Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive){
+        float swipeBoundary = dX;
+        if(swipeBoundary >= 150f){
+            swipeBoundary = 150f;
+        }else if(swipeBoundary <= -150f){
+            swipeBoundary = -150f;
+        }
+        new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                .addCornerRadius(TypedValue.COMPLEX_UNIT_PT, 8)
+                .addSwipeLeftBackgroundColor(getResources.getColor(R.color.green))
+                .addSwipeLeftActionIcon(R.drawable.baseline_edit_24)
+                .addSwipeRightBackgroundColor(getResources.getColor(R.color.red))
+                .addSwipeRightActionIcon(R.drawable.baseline_delete_forever_24_white)
+                .create()
+                .decorate();
+        super.onChildDraw(c, recyclerView, viewHolder, swipeBoundary, dY, actionState, isCurrentlyActive);
     }
 }

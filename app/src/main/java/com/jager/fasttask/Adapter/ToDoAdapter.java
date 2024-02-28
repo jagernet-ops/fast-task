@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jager.fasttask.Database.TaskListDatabase;
 import com.jager.fasttask.MainActivity;
-import com.jager.fasttask.NewTaskFragment;
+import com.jager.fasttask.Fragment.NewTaskFragment;
 import com.jager.fasttask.R;
 import com.jager.fasttask.Task;
 
