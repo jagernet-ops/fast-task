@@ -87,21 +87,23 @@ public class TaskListDatabase extends SQLiteOpenHelper {
         long filterTimestamp = new Date().getTime();
         List<Task> sortedTaskList = getAllTasks();
         List<Task> completedTasks = new ArrayList<>();
-        for(int i = 0; i < sortedTaskList.size(); i++){
-            if(sortedTaskList.get(i).getIsComplete()){
-                completedTasks.add(sortedTaskList.get(i));
-                sortedTaskList.remove(i);
-                i--;
-                continue;
-            }
-            if(sortedTaskList.get(i).getExpirationDate().getTime() > filterTimestamp){
-                Task currentTask = sortedTaskList.get(i);
-                int j = i - 1;
-                while(j >= 0 && sortedTaskList.get(j).getExpirationDate().getTime() > currentTask.getExpirationDate().getTime()){
-                    sortedTaskList.set(j+1, sortedTaskList.get(j));
-                    j--;
+        if(sortedTaskList.size() > 0) {
+            for (int i = 0; i < sortedTaskList.size(); i++) {
+                if (sortedTaskList.get(i).getIsComplete()) {
+                    completedTasks.add(sortedTaskList.get(i));
+                    sortedTaskList.remove(i);
+                    i--;
+                    continue;
                 }
-                sortedTaskList.set(j+1, currentTask);
+                if (sortedTaskList.get(i).getExpirationDate() != null && sortedTaskList.get(i).getExpirationDate().getTime() > filterTimestamp) {
+                    Task currentTask = sortedTaskList.get(i);
+                    int j = i - 1;
+                    while (j >= 0 && sortedTaskList.get(j).getExpirationDate().getTime() > currentTask.getExpirationDate().getTime()) {
+                        sortedTaskList.set(j + 1, sortedTaskList.get(j));
+                        j--;
+                    }
+                    sortedTaskList.set(j + 1, currentTask);
+                }
             }
         }
         if(completedTasks.size() > 0){

@@ -148,6 +148,9 @@ public class NewTaskFragment extends BottomSheetDialogFragment {
                 if(incomingBundle != null){
                     databaseHelper.deleteTask(incomingBundle.getInt("id"));
                 }
+                if(mainToDoAdapter != null){
+                    mainToDoAdapter.notifyDataSetChanged();
+                }
                 dismiss();
             }
         });
