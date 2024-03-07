@@ -43,11 +43,10 @@ public class FilterTaskFragment extends BottomSheetDialogFragment {
     private static TaskListDatabase databaseHelper;
     private static MainActivity mainActivityReference;
 
-    public static FilterTaskFragment getInstance(ToDoAdapter mainAdapter, TaskListDatabase mainDatabase, MainActivity mainActivity){
+    public FilterTaskFragment(ToDoAdapter mainAdapter, TaskListDatabase mainDatabase, MainActivity mainActivity){
         toDoAdapter = mainAdapter;
         databaseHelper = mainDatabase;
         mainActivityReference = mainActivity;
-        return new FilterTaskFragment();
     }
 
     @Nullable

@@ -79,7 +79,7 @@ public class TaskRecyclerSwipe extends ItemTouchHelper.SimpleCallback {
     }
 
     @Override
-    public void onChildDraw (Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive){
+    public void onChildDraw (@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive){
         float swipeBoundary = dX;
         if(swipeBoundary >= 150f){
             swipeBoundary = 150f;

@@ -26,37 +26,33 @@ import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements OnTaskFragmentCloseListener{
-    private RecyclerView toDoRecycler;
-    private FloatingActionButton addTodoButton;
     private List<Task> renderedTaskList;
     private ToDoAdapter toDoAdapter;
-    private MaterialToolbar filterButton;
     private TaskListDatabase taskDatabaseHelper;
-    private Resources getResources;
     private boolean isFiltering = false;
-    private MainActivity thisActivity = this;
+    private final MainActivity thisActivity = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     	AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         setContentView(R.layout.activity_main);
-        getResources = getResources();
+        Resources getResources = getResources();
         taskDatabaseHelper = TaskListDatabase.getManagementInstance(getApplicationContext());
-        toDoRecycler = findViewById(R.id.recyclerview);
-        addTodoButton = findViewById(R.id.fabButton);
-        filterButton = findViewById(R.id.topAppBar);
+        RecyclerView toDoRecycler = toDoRecycler = findViewById(R.id.recyclerview);
+        FloatingActionButton addTodoButton = addTodoButton = findViewById(R.id.fabButton);
+        MaterialToolbar filterButton = filterButton = findViewById(R.id.topAppBar);
         filterButton.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 isFiltering = true;
-                FilterTaskFragment.getInstance(toDoAdapter, taskDatabaseHelper, thisActivity).show(getSupportFragmentManager(), FilterTaskFragment.getInstance(toDoAdapter, taskDatabaseHelper, thisActivity).getTag());
+                new FilterTaskFragment(toDoAdapter, taskDatabaseHelper, thisActivity).show(getSupportFragmentManager(), new FilterTaskFragment(toDoAdapter, taskDatabaseHelper, thisActivity).getTag());
 
             }
         });
         taskDatabaseHelper.getTaskFromFilter(TaskListContract.TaskEntry.COLUMN_NAME_CATEGORY, "Fruit");
         renderedTaskList = new ArrayList<>();
-        toDoAdapter = new ToDoAdapter(this);
+        toDoAdapter = new ToDoAdapter(this, taskDatabaseHelper);
         toDoRecycler.setLayoutManager(new LinearLayoutManager(this));
         toDoRecycler.setAdapter(toDoAdapter);
         taskDatabaseHelper.markExpiredTasksComplete();
@@ -68,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements OnTaskFragmentClo
             @Override
             public void onClick(View v) {
                 isFiltering = false;
-                NewTaskFragment.getInstance(renderedTaskList, toDoAdapter).show(getSupportFragmentManager(), NewTaskFragment.getInstance(renderedTaskList, toDoAdapter).getTag());
+                new NewTaskFragment(taskDatabaseHelper).show(getSupportFragmentManager(), new NewTaskFragment(taskDatabaseHelper).getTag());
                 renderedTaskList = taskDatabaseHelper.getAllTasks();
                 Collections.reverse(renderedTaskList);
                 toDoAdapter.setTaskList(renderedTaskList);

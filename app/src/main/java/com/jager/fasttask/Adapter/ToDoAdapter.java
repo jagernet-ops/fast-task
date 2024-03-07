@@ -31,9 +31,9 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
     private final MainActivity activity;
     private final TaskListDatabase databaseHelper;
 
-    public ToDoAdapter(MainActivity mainActivity){
+    public ToDoAdapter(MainActivity mainActivity, TaskListDatabase mainDatabase){
         this.activity = mainActivity;
-        this.databaseHelper = TaskListDatabase.getManagementInstance(mainActivity.getApplicationContext());
+        this.databaseHelper = mainDatabase;
     }
 
     @NonNull
@@ -111,7 +111,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
             taskInfoBundle.putLong("taskExpiration", targetTask.getExpirationDate().getTime());
         }
 
-        NewTaskFragment editPopup = new NewTaskFragment();
+        NewTaskFragment editPopup = new NewTaskFragment(databaseHelper);
         editPopup.setArguments(taskInfoBundle);
         editPopup.show(activity.getSupportFragmentManager(), editPopup.getTag());
     }

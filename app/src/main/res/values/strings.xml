@@ -7,4 +7,7 @@
     <string name="loremIpsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam pharetra tortor quis mattis dictum. Aenean sed lorem augue. Curabitur a tortor ultrices, vehicula magna ac, ornare lacus. Donec ac justo turpis. Pellentesque vel aliquet neque. Phasellus at ullamcorper nulla. Mauris sollicitudin scelerisque quam. Duis cursus dolor id est ullamcorper maximus. Etiam auctor enim sit amet congue egestas. Aenean dui augue, rutrum aliquam velit vitae, ornare varius ipsum. Phasellus sodales ipsum quis mollis fermentum. Sed sapien augue, tristique sit amet consequat nec, pulvinar et lacus. Donec malesuada dui dui, nec molestie ligula pharetra vitae. Ut in efficitur lectus. Nullam odio magna, vulputate sit amet viverra quis, egestas at massa.</string>
     <string name="started_s">Started: %s</string>
     <string name="expires_s">Expires: %s</string>
+    <string name="filter_tasks">Filter Tasks</string>
+    <string name="filter_color">Filter Color</string>
+    <string name="filter_expiry">Filter Expiry</string>
 </resources>

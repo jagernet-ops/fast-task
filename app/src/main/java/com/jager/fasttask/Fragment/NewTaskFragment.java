@@ -32,30 +32,22 @@ import java.util.List;
 
 public class NewTaskFragment extends BottomSheetDialogFragment {
     private static final String TAG = "NewTaskFragment";
-    private final TaskListDatabase databaseHelper = TaskListDatabase.getManagementInstance(getActivity());
+    private final TaskListDatabase databaseHelper;
 
     private String taskColor = "#000000";
     private EditText taskName;
     private EditText taskDescription;
     private EditText taskCategory;
     private EditText taskExpiration;
-    private Button colorPicker;
-    private Button discardTask;
-    private Button saveTask;
-    private static List<Task> taskList;
-    private static ToDoAdapter mainToDoAdapter;
 
-    public static NewTaskFragment getInstance(List<Task> tasks, ToDoAdapter toDoAdapter){
-        taskList = tasks;
-        mainToDoAdapter = toDoAdapter;
-        return new NewTaskFragment();
+    public NewTaskFragment(TaskListDatabase mainDatabase){
+        databaseHelper = mainDatabase;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.new_task_gen, container, false);
-        return view;
+        return inflater.inflate(R.layout.new_task_gen, container, false);
     }
 
     @Override
@@ -65,9 +57,9 @@ public class NewTaskFragment extends BottomSheetDialogFragment {
         taskDescription = view.findViewById(R.id.taskdescription);
         taskCategory = view.findViewById(R.id.taskcategory);
         taskExpiration = view.findViewById(R.id.taskexpiration);
-        colorPicker = view.findViewById(R.id.colorselectbutton);
-        discardTask = view.findViewById(R.id.discardtaskbutton);
-        saveTask = view.findViewById(R.id.savetaskbutton);
+        Button colorPicker = view.findViewById(R.id.colorselectbutton);
+        Button discardTask = view.findViewById(R.id.discardtaskbutton);
+        Button saveTask = view.findViewById(R.id.savetaskbutton);
         boolean updateTask = false;
         Bundle incomingBundle = getArguments();
         if(incomingBundle != null){
