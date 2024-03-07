@@ -4,19 +4,16 @@ package com.jager.fasttask.Fragment;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.res.TypedArrayUtils;
 
 import com.github.dhaval2404.colorpicker.MaterialColorPickerDialog;
 import com.github.dhaval2404.colorpicker.listener.ColorListener;
@@ -31,7 +28,6 @@ import com.jager.fasttask.Task;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class FilterTaskFragment extends BottomSheetDialogFragment {
@@ -62,7 +58,7 @@ public class FilterTaskFragment extends BottomSheetDialogFragment {
         taskFilter = view.findViewById(R.id.filterAutoComplete);
         filterColor = view.findViewById(R.id.filterColor);
         filterExpiry = view.findViewById(R.id.filterExpiry);
-        List<String> retrievedCategories = databaseHelper.getAllTasks().stream().map(Task::getCategory).collect(Collectors.toList());
+        List<String> retrievedCategories = databaseHelper.getAllTasks().stream().map(Task::getCategory).distinct().collect(Collectors.toList());
         ArrayList<String> adapterCompliantList = new ArrayList<>(retrievedCategories.size()+1);
         adapterCompliantList.add(" ");
         adapterCompliantList.addAll(retrievedCategories);
@@ -88,7 +84,7 @@ public class FilterTaskFragment extends BottomSheetDialogFragment {
             @Override
             public void onClick(View v) {
                if(toDoAdapter.getTaskList().size() != 0){
-                   String[] colors = databaseHelper.getAllTasks().stream().map(Task::getColor).toArray(String[]::new);
+                   String[] colors = databaseHelper.getAllTasks().stream().map(Task::getColor).distinct().toArray(String[]::new);
                    new MaterialColorPickerDialog.Builder(requireActivity())
                            .setColors(colors)
                            .setColorListener(new ColorListener() {

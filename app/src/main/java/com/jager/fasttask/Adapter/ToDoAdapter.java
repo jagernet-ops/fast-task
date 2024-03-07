@@ -63,16 +63,20 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
             String expiresOn = "Expires: "+Task.getFormattedDate(task.getExpirationDate());
             holder.taskExpire.setText(expiresOn);
         }
-        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    task.setComplete(true);
-                    databaseHelper.updateTask(task);
-                    notifyDataSetChanged();
+        if(!task.getIsComplete()){
+            holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked){
+                        task.setComplete(true);
+                        databaseHelper.updateTask(task);
+                        notifyDataSetChanged();
+                    }
                 }
-            }
-        });
+            });
+        }else{
+            holder.checkBox.setEnabled(false);
+        }
         holder.expandTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,9 +84,11 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
                 if(task.getIsExpanded()){
                     holder.expandTaskButton.setImageResource(R.drawable.baseline_expand_less_24);
                     holder.expandedTask.setVisibility(View.VISIBLE);
+                    notifyDataSetChanged();
                 }else{
                     holder.expandTaskButton.setImageResource(R.drawable.baseline_expand_more_24);
                     holder.expandedTask.setVisibility(View.GONE);
+                    notifyDataSetChanged();
                 }
             }
         });
