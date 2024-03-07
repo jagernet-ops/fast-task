@@ -39,9 +39,11 @@ public class NewTaskFragment extends BottomSheetDialogFragment {
     private EditText taskDescription;
     private EditText taskCategory;
     private EditText taskExpiration;
+    private ToDoAdapter mainToDoAdapter;
 
-    public NewTaskFragment(TaskListDatabase mainDatabase){
+    public NewTaskFragment(TaskListDatabase mainDatabase, ToDoAdapter todoAdapter){
         databaseHelper = mainDatabase;
+        mainToDoAdapter = todoAdapter;
     }
 
     @Nullable

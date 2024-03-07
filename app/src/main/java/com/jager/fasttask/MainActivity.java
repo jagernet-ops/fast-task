@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements OnTaskFragmentClo
             @Override
             public void onClick(View v) {
                 isFiltering = false;
-                new NewTaskFragment(taskDatabaseHelper).show(getSupportFragmentManager(), new NewTaskFragment(taskDatabaseHelper).getTag());
+                new NewTaskFragment(taskDatabaseHelper, toDoAdapter).show(getSupportFragmentManager(), new NewTaskFragment(taskDatabaseHelper, toDoAdapter).getTag());
                 renderedTaskList = taskDatabaseHelper.getAllTasks();
                 Collections.reverse(renderedTaskList);
                 toDoAdapter.setTaskList(renderedTaskList);

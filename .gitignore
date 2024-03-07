@@ -31,3 +31,9 @@ google-services.json
 
 # Android Profiling
 *.hprof
+.project
+.settings/
+app/.classpath
+app/.project
+app/.settings/
+

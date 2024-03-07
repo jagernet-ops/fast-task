@@ -117,7 +117,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
             taskInfoBundle.putLong("taskExpiration", targetTask.getExpirationDate().getTime());
         }
 
-        NewTaskFragment editPopup = new NewTaskFragment(databaseHelper);
+        NewTaskFragment editPopup = new NewTaskFragment(databaseHelper, this);
         editPopup.setArguments(taskInfoBundle);
         editPopup.show(activity.getSupportFragmentManager(), editPopup.getTag());
     }
