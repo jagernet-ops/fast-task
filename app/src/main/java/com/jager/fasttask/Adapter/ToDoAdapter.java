@@ -1,8 +1,11 @@
 package com.jager.fasttask.Adapter;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.provider.CalendarContract;
+import android.provider.CalendarContract.Events;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,10 +61,25 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
         holder.taskStart.setText(createdOn);
         if(task.getExpirationDate() == null){
             holder.taskExpire.setVisibility(View.GONE);
+            holder.addToCalendar.setVisibility(View.GONE);
         }else{
             holder.taskExpire.setVisibility(View.VISIBLE);
+            holder.addToCalendar.setVisibility(View.VISIBLE);
             String expiresOn = "Expires: "+Task.getFormattedDate(task.getExpirationDate());
             holder.taskExpire.setText(expiresOn);
+            holder.addToCalendar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Intent.ACTION_INSERT)
+                            .setData(Events.CONTENT_URI)
+                            .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, task.getExpirationDate().getTime())
+                            .putExtra(Events.TITLE, task.getTaskName())
+                            .putExtra(Events.DESCRIPTION, task.getTaskDescription())
+                            .putExtra(Events.AVAILABILITY, Events.AVAILABILITY_BUSY)
+                            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    activity.getApplicationContext().startActivity(intent);
+                }
+            });
         }
         if(!task.getIsComplete()){
             holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -135,6 +153,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
         TextView taskStart;
         TextView taskExpire;
         RelativeLayout expandedTask;
+        ImageButton addToCalendar;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             checkBox = itemView.findViewById(R.id.taskcheckbox);
@@ -145,6 +164,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
             taskDescription = itemView.findViewById(R.id.taskcarddescription);
             taskStart = itemView.findViewById(R.id.startingDate);
             taskExpire = itemView.findViewById(R.id.expireDate);
+            addToCalendar = itemView.findViewById(R.id.addToCalendar);
         }
     }
 }

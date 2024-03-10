@@ -1,8 +1,13 @@
 package com.jager.fasttask.Fragment;
 
 import android.app.Activity;
+import android.content.ContentUris;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +24,7 @@ import com.github.dhaval2404.colorpicker.model.ColorShape;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.jager.fasttask.Adapter.ToDoAdapter;
 import com.jager.fasttask.Database.TaskListDatabase;
+import com.jager.fasttask.MainActivity;
 import com.jager.fasttask.OnTaskFragmentCloseListener;
 import com.jager.fasttask.R;
 import com.jager.fasttask.Task;

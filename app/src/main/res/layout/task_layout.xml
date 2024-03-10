@@ -61,6 +61,7 @@
             android:layout_below="@+id/taskLayout"
             android:id="@+id/expandedView"
             android:visibility="gone"
+            android:layout_marginBottom="10dp"
             android:background="@color/white">
             <TextView
                 android:layout_width="150dp"
@@ -78,17 +79,28 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="20dp"
                 />
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
+                android:layout_below="@id/startingDate"
+                android:layout_marginEnd="20dp"
+                android:gravity="center"
+                android:layout_alignParentEnd="true">
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/addToCalendar"
+                    android:src="@drawable/baseline_calendar_month_24"
+                    android:layout_marginRight="10dp"
+                    android:background="@color/white"/>
+                <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:id="@+id/expireDate"
-                android:layout_marginTop="10dp"
                 android:layout_below="@+id/startingDate"
                 android:maxLength="17"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="10dp"
                 android:text="@string/expires_s"/>
+            </LinearLayout>
         </RelativeLayout>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
