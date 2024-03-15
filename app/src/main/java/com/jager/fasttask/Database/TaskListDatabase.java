@@ -29,7 +29,7 @@ public class TaskListDatabase extends SQLiteOpenHelper {
     private static final String SQL_DELETE_TASK_ENTRIES =
             "DROP TABLE IF EXISTS " + TaskEntry.TABLE_NAME;
 
-    private static final String DATABASE_NAME = "TaskList.db";
+    private static String DATABASE_NAME = "TaskList.db";
     private static final int DATABASE_VERSION = 1;
     private static TaskListDatabase managementInstance = null;
 
@@ -44,6 +44,9 @@ public class TaskListDatabase extends SQLiteOpenHelper {
         return managementInstance;
     }
 
+    public static void setDATABASE_NAME(String dATABASE_NAME) {
+      DATABASE_NAME = dATABASE_NAME;
+    }
 
     public void insertTask(Task task){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -73,10 +76,9 @@ public class TaskListDatabase extends SQLiteOpenHelper {
     }
 
     public void markExpiredTasksComplete(){
-        Date onOpenDate = new Date();
         List<Task> allTasks = getAllTasks();
         for(Task task : allTasks){
-            if(task.getExpirationDate() != null && task.getExpirationDate().getTime() <= onOpenDate.getTime()){
+            if(task.getExpirationDate() != null && task.hasExpired()){
                 task.setComplete(true);
                 updateTask(task);
             }
@@ -187,6 +189,11 @@ public class TaskListDatabase extends SQLiteOpenHelper {
         }
         updatedTaskValues.put(TaskEntry.COLUMN_NAME_COMPLETION, task.getIsComplete() ? 1 : 0 );
         db.update(TaskEntry.TABLE_NAME, updatedTaskValues, TaskEntry._ID+"=?", new String[]{String.valueOf(task.getId())});
+    }
+
+    public Cursor getDBCursor(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.query(TaskEntry.TABLE_NAME, null, null, null, null, null, null);
     }
 
     @Override
