@@ -23,9 +23,9 @@ public class TaskListDatabase extends SQLiteOpenHelper {
                     TaskEntry.COLUMN_NAME_TASK_NAME + " TEXT, " +
                     TaskEntry.COLUMN_NAME_DESCRIPTION + " TEXT, " +
                     TaskEntry.COLUMN_NAME_COLOR + " TEXT, " +
-                    TaskEntry.COLUMN_NAME_EXPIRATION + " TEXT, " +
-                    TaskEntry.COLUMN_NAME_CREATION + " TEXT, " +
-                    TaskEntry.COLUMN_NAME_COMPLETION + " TEXT );";
+                    TaskEntry.COLUMN_NAME_EXPIRATION + " INTEGER, " +
+                    TaskEntry.COLUMN_NAME_CREATION + " INTEGER, " +
+                    TaskEntry.COLUMN_NAME_COMPLETION + " INTEGER );";
     private static final String SQL_DELETE_TASK_ENTRIES =
             "DROP TABLE IF EXISTS " + TaskEntry.TABLE_NAME;
 
